@@ -1,18 +1,16 @@
-import { utils } from "pixi.js";
+import { EventEmitter } from 'eventemitter3';
 
 export class Keyboard {
 
     public static readonly state: Map<string, boolean> = new Map();
-
-    public static readonly down: utils.EventEmitter = new utils.EventEmitter();
-    public static readonly up: utils.EventEmitter = new utils.EventEmitter();
+    public static readonly down = new EventEmitter();
+    public static readonly up = new EventEmitter();
 
     private constructor() {}
 
-    private static initialized:boolean = false;
+    private static initialized: boolean = false;
 
-    public static initialize():void
-    {
+    public static initialize(): void {
         if (Keyboard.initialized) {
             return;
         }
@@ -21,19 +19,15 @@ export class Keyboard {
         document.addEventListener("keyup", Keyboard.onKeyUp);
     }
 
-    private static onKeyDown(e: KeyboardEvent) 
-    {
-        if (Keyboard.state.get(e.code) != true) 
-        {
+    private static onKeyDown(e: KeyboardEvent) {
+        if (Keyboard.state.get(e.code) !== true) {
             Keyboard.down.emit(e.code);
         }
-
-        Keyboard.state.set(e.code,true);
+        Keyboard.state.set(e.code, true);
     }
 
-    private static onKeyUp(e: KeyboardEvent) 
-    {
+    private static onKeyUp(e: KeyboardEvent) {
         Keyboard.up.emit(e.code);
-        Keyboard.state.set(e.code,false);
+        Keyboard.state.set(e.code, false);
     }
 }

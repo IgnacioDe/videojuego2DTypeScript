@@ -15,7 +15,7 @@ export class Button extends Container
         this.down = down;
         this.over = over;
 
-        this.spr = Sprite.from(def);
+        this.spr = new Sprite(def);
         this.spr.anchor.set(0.5)
         this.addChild(this.spr);
 

@@ -1,6 +1,6 @@
 import { Container, Sprite, Text, Texture } from "pixi.js";
-import { Button } from "./Button";
-import { Keyboard } from "./Keyboard";
+import { Button } from "./boton";
+import { Keyboard } from "./keyboard";
 
 export class interacts extends Container {
 
@@ -13,24 +13,27 @@ export class interacts extends Container {
         dialog.x = 100;
         dialog.y = 50;
 
-        const background = Sprite.from("window");
+        const background = Sprite.from("/assets/window.png");
         dialog.addChild(background);
 
         this.buttonPointer = new Button(
-            Texture.from("texture example def"), 
-            Texture.from("texture example down"), 
-            Texture.from("texture example over"), 
+            Texture.from("/assets/button_def.png"), 
+            Texture.from("/assets/button_down.png"), 
+            Texture.from("/assets/button_over.png"), 
             );
-        this.buttonPointer.on("buttonClick", this.onButtonClick, this);
+        this.buttonPointer.on("buttonClicked", this.onButtonClick, this);
         this.buttonPointer.x = background.width / 2 - this.buttonPointer.width * 0.6;
         this.buttonPointer.y = background.height + 20;
         dialog.addChild(this.buttonPointer);
 
-        this.lastKeyPressed = new Text("Wait...", {fontSize: 48});
+        // Ajuste para Pixi v8: objeto de configuración
+        this.lastKeyPressed = new Text({
+            text: "Wait...", 
+            style: { fontSize: 48 }
+        });
         this.lastKeyPressed.anchor.set(0.5);
         this.lastKeyPressed.x = background.width / 2;
         this.lastKeyPressed.y = this.buttonPointer.y + 175;
-        //dialog.addChild(this.lastKeyPressed);
 
         this.addChild(dialog);
 
@@ -38,6 +41,7 @@ export class interacts extends Container {
         Keyboard.up.on("KeyW", this.onKeyDespress, this);
     }
 
+    // ... (El resto de la lógica se mantiene igual)
     private onButtonClick(): void{
         console.log("my new button clicked!", Keyboard.state.get("KeyA"));
     }
