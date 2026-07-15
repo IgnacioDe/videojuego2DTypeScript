@@ -4,16 +4,20 @@ import { Player } from "../personaje/jugador";
 import { Platform } from "../personaje/plataforma";
 import { checkCollision } from "../personaje/IHitbox";
 import { HEIGHT, WIDTH } from "..";
+import { HUD } from "../interfaz/hud";
 
 export class Scene extends Container implements IScene {
     private pj: Player;
     private suelo: Platform[];
     private world: Container;
     private background: TilingSprite;
+    private miHud: HUD;
+    private currentPersonajeId: string;
     // private timePass: number = 0;
 
-    constructor() {
+    constructor(personajeId: string) {
         super();
+        this.currentPersonajeId = personajeId;
 
         // 1. El mundo contendrá las plataformas y al jugador para que la cámara los mueva juntos
         this.world = new Container();
@@ -34,9 +38,13 @@ export class Scene extends Container implements IScene {
         }
 
         // 4. Creamos al jugador y lo soltamos justo por encima del suelo
-        this.pj = new Player();
+        this.pj = new Player(this.currentPersonajeId);
         this.pj.position.set(200, HEIGHT - 500); 
         this.world.addChild(this.pj); // El jugador debe pertenecer a 'world'
+
+        // Lo añadimos a 'this' y no a 'world', para que no se mueva con la cámara
+        this.miHud = new HUD();
+        this.addChild(this.miHud);
     }
 
     public update(deltaTime: number, _deltaFrame: number) {
@@ -61,21 +69,6 @@ export class Scene extends Container implements IScene {
         this.background.tilePosition.x = this.world.x * 0.5;
 
         // 6. Reciclaje infinito de plataformas
-        //for (let camino of this.suelo) {
-            // Si la plataforma quedó muy atrás a la izquierda del jugador...
-          //  if (camino.x + 500 < this.pj.x - WIDTH / 2) {
-            //    camino.destroy({ children: true }); 
-                
-              //  const nuevoSuelo = new Platform();
-                //const last = this.suelo[this.suelo.length - 1];
-                
-                // La creamos a continuación de la última
-               // nuevoSuelo.position.set(last.x + 500, HEIGHT - 200);
-               // this.world.addChild(nuevoSuelo);
-               // this.suelo.push(nuevoSuelo);
-           // }
-        //}
-
         this.suelo.sort((a, b) => a.x - b.x);
 
         const primerSuelo = this.suelo[0]; // La más a la izquierda

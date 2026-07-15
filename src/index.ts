@@ -1,11 +1,15 @@
-import { Application, Assets } from "pixi.js"; // <-- Importamos Assets para pre cargar las imagenes
+import { Application, Assets, Container } from "pixi.js"; // <-- Importamos Assets para pre cargar las imagenes
 // import { interacts } from "./teclado/interacciones";
 import { Keyboard } from "./teclado/keyboard";
 import { Scene } from "./escenas/escena";
+import { MenuPrincipal } from "./escenas/menuPrincipal";
+import { SeleccionPersonaje } from "./escenas/seleccionPersonaje";
 
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
 export const app = new Application();
+
+let escenaActual: any = null;
 
 export async function launchGame(canvas: HTMLCanvasElement): Promise<void> {
     await app.init({
@@ -19,7 +23,7 @@ export async function launchGame(canvas: HTMLCanvasElement): Promise<void> {
 
     Keyboard.initialize();
 
-    // ---- NUEVO: PRECARGA DE ASSETS ----
+    // ---- PRECARGA DE ASSETS ----
     console.log("Cargando texturas del juego...");
     // Añade aquí todas las imágenes que tus clases van a usar.
     // Asegúrate de usar las rutas según dónde las guardes en tu servidor local (ej: /assets/...)
@@ -51,14 +55,33 @@ export async function launchGame(canvas: HTMLCanvasElement): Promise<void> {
     });
     window.dispatchEvent(new Event("resize"));
 
-    // Ahora que las texturas están seguras en caché, creamos las escenas
-    const myScene = new Scene();
-    // const myInteract = new interacts();
-    
-    app.stage.addChild(myScene);
-    // app.stage.addChild(myInteract);
+    function cambiarEscena(nuevaEscena: Container) {
+        if (escenaActual) {
+            app.stage.removeChild(escenaActual);
+            // Opcional: escenaActual.destroy() si quieres limpiar memoria por completo
+        }
+        escenaActual = nuevaEscena;
+        app.stage.addChild(escenaActual);
+    }
 
+    const iniciarJuego = (personajeId: string) => {
+        const myScene = new Scene(personajeId);
+        cambiarEscena(myScene);
+    };
+
+    const irASeleccion = () => {
+        const seleccion = new SeleccionPersonaje(iniciarJuego);
+        cambiarEscena(seleccion);
+    };
+
+    // Al arrancar, mostramos el Menú Principal
+    const menu = new MenuPrincipal(irASeleccion);
+    cambiarEscena(menu);
+
+    // --- El ticker ahora actualiza la escena actual si esta tiene update() ---
     app.ticker.add((ticker) => {
-        myScene.update(ticker.deltaMS / 1000, ticker.deltaTime);
+        if (escenaActual && escenaActual.update) {
+            escenaActual.update(ticker.deltaMS / 1000, ticker.deltaTime);
+        }
     });
 }

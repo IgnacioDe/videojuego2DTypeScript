@@ -13,16 +13,21 @@ export class Player extends MovePhysics implements IHitBox {
     private hitBox: Graphics;
     private isAttack: boolean = false;
 
-    constructor() {
+    constructor(personajeId: string) {
         super();
 
-        this.animatedMilei = new AnimatedSprite([
-            Texture.from("/assets/maili/milei.png"),
-            Texture.from("/assets/maili/milei2.png"),
-            Texture.from("/assets/maili/milei3.png"),
-            Texture.from("/assets/maili/milei4.png"),
-            Texture.from("/assets/maili/milei5.png")
-        ]);
+        let texturas: any[] = [];
+        if (personajeId === "milei") {
+            texturas = [
+                Texture.from("/assets/maili/milei.png"),
+                Texture.from("/assets/maili/milei2.png"),
+                Texture.from("/assets/maili/milei3.png"),
+                Texture.from("/assets/maili/milei4.png"),
+                Texture.from("/assets/maili/milei5.png")
+            ];
+        }
+
+        this.animatedMilei = new AnimatedSprite(texturas)
         
         this.animatedMilei.gotoAndStop(0);
         // this.animatedMilei.play();
