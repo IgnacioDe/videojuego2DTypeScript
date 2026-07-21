@@ -1,0 +1,263 @@
+{
+    "frames": {
+        "ataque_1": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "ataque_2": {
+            "frame": {
+                "x": 160,
+                "y": 0,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "ataque_3": {
+            "frame": {
+                "x": 320,
+                "y": 0,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "ataque_4": {
+            "frame": {
+                "x": 480,
+                "y": 0,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "ataque_5": {
+            "frame": {
+                "x": 640,
+                "y": 0,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "ataque_6": {
+            "frame": {
+                "x": 800,
+                "y": 0,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "caminar_1": {
+            "frame": {
+                "x": 0,
+                "y": 180,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "caminar_2": {
+            "frame": {
+                "x": 160,
+                "y": 180,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "caminar_3": {
+            "frame": {
+                "x": 320,
+                "y": 180,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "caminar_4": {
+            "frame": {
+                "x": 480,
+                "y": 180,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "caminar_5": {
+            "frame": {
+                "x": 640,
+                "y": 180,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "salto_1": {
+            "frame": {
+                "x": 0,
+                "y": 360,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "salto_2": {
+            "frame": {
+                "x": 160,
+                "y": 360,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "salto_3": {
+            "frame": {
+                "x": 320,
+                "y": 360,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "salto_4": {
+            "frame": {
+                "x": 480,
+                "y": 360,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "salto_5": {
+            "frame": {
+                "x": 640,
+                "y": 360,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "salto_6": {
+            "frame": {
+                "x": 800,
+                "y": 360,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "derrota_1": {
+            "frame": {
+                "x": 0,
+                "y": 540,
+                "w": 192,
+                "h": 180
+            }
+        },
+        "derrota_2": {
+            "frame": {
+                "x": 192,
+                "y": 540,
+                "w": 192,
+                "h": 180
+            }
+        },
+        "derrota_3": {
+            "frame": {
+                "x": 384,
+                "y": 540,
+                "w": 192,
+                "h": 180
+            }
+        },
+        "derrota_4": {
+            "frame": {
+                "x": 576,
+                "y": 540,
+                "w": 192,
+                "h": 180
+            }
+        },
+        "derrota_5": {
+            "frame": {
+                "x": 768,
+                "y": 540,
+                "w": 192,
+                "h": 180
+            }
+        },
+        "seleccion_personaje": {
+            "frame": {
+                "x": 0,
+                "y": 720,
+                "w": 320,
+                "h": 380
+            }
+        },
+        "retrato_100.png": {
+            "frame": {
+                "x": 320,
+                "y": 800,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "retrato_75.png": {
+            "frame": {
+                "x": 480,
+                "y": 800,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "retrato_50.png": {
+            "frame": {
+                "x": 640,
+                "y": 800,
+                "w": 160,
+                "h": 180
+            }
+        },
+        "retrato_25.png": {
+            "frame": {
+                "x": 800,
+                "y": 800,
+                "w": 160,
+                "h": 180
+            }
+        }
+    },
+    "animations": {
+        "ataque": [
+            "ataque_1",
+            "ataque_2",
+            "ataque_3",
+            "ataque_4",
+            "ataque_5",
+            "ataque_6"
+        ],
+        "caminar": [
+            "caminar_1",
+            "caminar_2",
+            "caminar_3",
+            "caminar_4",
+            "caminar_5"
+        ],
+        "salto": [
+            "salto_1",
+            "salto_2",
+            "salto_3",
+            "salto_4",
+            "salto_5",
+            "salto_6"
+        ],
+        "derrota": [
+            "derrota_1",
+            "derrota_2",
+            "derrota_3",
+            "derrota_4",
+            "derrota_5"
+        ]
+    },
+    "meta": {
+        "app": "Manual Build",
+        "version": "1.0",
+        "image": "milei_spritesheet.png",
+        "format": "RGBA8888",
+        "size": {
+            "w": 960,
+            "h": 1102
+        },
+        "scale": "1"
+    }
+}

@@ -1,5 +1,5 @@
 // jugador.ts
-import { AnimatedSprite, Graphics, Texture, Rectangle } from "pixi.js";
+import { AnimatedSprite, Graphics, Rectangle, Assets } from "pixi.js";
 import { MovePhysics } from "./fisicasMovimiento";
 import { Keyboard } from "../teclado/keyboard";
 import { IHitBox } from "./IHitbox";
@@ -12,25 +12,50 @@ export class Player extends MovePhysics implements IHitBox {
     public canJump = true;
     private hitBox: Graphics;
     private isAttack: boolean = false;
+    
+    private animaciones: Record<string, any>; 
+    private estadoActual: string = "caminata";
 
     constructor(personajeId: string) {
         super();
 
-        let texturas: any[] = [];
-        if (personajeId === "milei") {
-            texturas = [
-                Texture.from("/assets/maili/milei.png"),
-                Texture.from("/assets/maili/milei2.png"),
-                Texture.from("/assets/maili/milei3.png"),
-                Texture.from("/assets/maili/milei4.png"),
-                Texture.from("/assets/maili/milei5.png")
-            ];
+        // Evaluamos el ID que recibimos y cargamos sus animaciones
+        if (personajeId === "milei") { 
+            const sheet = Assets.get("/assets/Presidentes/Milei/milei_spritesheet.json");
+            this.animaciones = {
+                caminata: sheet.animations["caminar"], 
+                ataque: sheet.animations["ataque"],
+                salto: sheet.animations["salto"],
+                derrota: sheet.animations["derrota"]
+            };
+        } else {
+            // FALLBACK: Si pasamos un ID que no existe, cargamos a Milei por defecto 
+            // para evitar que el juego crashee. El día de mañana, aquí agregas tus otros personajes.
+            console.warn(`Personaje "${personajeId}" no encontrado. Cargando personaje por defecto.`);
+            const sheet = Assets.get("/assets/Presidentes/Milei/milei_spritesheet.json");
+            this.animaciones = {
+                caminata: sheet.animations["caminar"], 
+                ataque: sheet.animations["ataque"],
+                salto: sheet.animations["salto"],
+                derrota: sheet.animations["derrota"]
+            };
         }
+        //let texturas: any[] = [];
+        //if (personajeId === "milei") {
+          //  texturas = [
+            //    Texture.from("/assets/maili/milei.png"),
+              //  Texture.from("/assets/maili/milei2.png"),
+               // Texture.from("/assets/maili/milei3.png"),
+               // Texture.from("/assets/maili/milei4.png"),
+               // Texture.from("/assets/maili/milei5.png")
+           // ];
+       // }
 
-        this.animatedMilei = new AnimatedSprite(texturas)
+        this.animatedMilei = new AnimatedSprite(this.animaciones["caminata"]);
+        //this.animatedMilei = new AnimatedSprite(texturas)
         
-        this.animatedMilei.gotoAndStop(0);
-        // this.animatedMilei.play();
+        //this.animatedMilei.gotoAndStop(0);
+        this.animatedMilei.play();
         this.animatedMilei.animationSpeed = 0.25;
         this.animatedMilei.width = 250;
         this.animatedMilei.height = 250;
@@ -59,12 +84,23 @@ export class Player extends MovePhysics implements IHitBox {
         Keyboard.up.on("KeyK", this.stopAttack, this);
     }
 
+    // cambiar animacion 
+    public cambiarAnimacion(nuevaAnimacion: string, loopear: boolean = true): void {
+        if (this.estadoActual === nuevaAnimacion) return; // Si ya está en esa animación, no hacemos nada
+
+        this.estadoActual = nuevaAnimacion;
+        this.animatedMilei.textures = this.animaciones[nuevaAnimacion]; // Cambiamos los frames
+        this.animatedMilei.loop = loopear;
+        this.animatedMilei.gotoAndPlay(0); // Reiniciamos y reproducimos
+    }
+
     // Función para iniciar el ataque
     private startAttack(): void {
         if (!this.isAttack) {
             this.isAttack = true;
-            this.animatedMilei.loop = true;
-            this.animatedMilei.play();
+            //this.animatedMilei.loop = true;
+            //this.animatedMilei.play();
+            this.cambiarAnimacion("ataque", true);
         }
     }
 
@@ -72,8 +108,9 @@ export class Player extends MovePhysics implements IHitBox {
     private stopAttack(): void {
         if (this.isAttack) {
             this.isAttack = false;
-            this.animatedMilei.loop = false;
-            this.animatedMilei.gotoAndStop(0);
+            //this.animatedMilei.loop = false;
+            //this.animatedMilei.gotoAndStop(0);
+            this.cambiarAnimacion("caminata", true);
         }
     }
 
@@ -99,6 +136,28 @@ export class Player extends MovePhysics implements IHitBox {
             //this.hitBox.scale.x = currentScaleBox; // Restaurar la escala del hitbox horizontalmente
         }
 
+        // --- CONTROL DE ANIMACIONES AL ESTAR EN EL SUELO ---
+        // Solo verificamos esto si estamos pisando el suelo y no atacando
+        if (this.canJump && !this.isAttack) {
+            
+            if (this.speed.x !== 0) {
+                // Si hay velocidad (está apretando A o D), nos aseguramos de que camine
+                this.cambiarAnimacion("caminata", true);
+                
+                // Aseguramos que la animación se esté reproduciendo
+                if (!this.animatedMilei.playing) {
+                    this.animatedMilei.play();
+                }
+            } else {
+                // Si la velocidad es 0 (no toca teclas), frenamos la animación 
+                // y lo dejamos en el frame 0 (parado).
+                this.animatedMilei.gotoAndStop(0);
+                
+                // (Nota: Si el día de mañana agregas una animación de "respirar_quieto" 
+                // en tu spritesheet, aquí llamarías a: this.cambiarAnimacion("quieto", true) )
+            }
+        }
+
         // Llamamos a las físicas base (MovePhysics) para aplicar velocidad y gravedad
         super.update(deltaSeconds);
     }
@@ -112,6 +171,7 @@ export class Player extends MovePhysics implements IHitBox {
         if (this.canJump) {
             this.speed.y = -Player.JUMP_SPEED;
             this.canJump = false;
+            this.cambiarAnimacion("salto", false);
         }
     }
 
@@ -127,7 +187,14 @@ export class Player extends MovePhysics implements IHitBox {
             if (this.y < targetPosition.y) {
                 this.y -= overlap.height;
                 this.speed.y = 0;
-                this.canJump = true;
+                //this.canJump = true;
+                if (!this.canJump) {
+                    this.canJump = true; // Recupera el salto
+                    // Si toca el suelo y no está atacando, vuelve a la animación normal.
+                    if (!this.isAttack) {
+                        this.cambiarAnimacion("caminata", true);
+                    }
+                }
             } else {
                 this.y += overlap.height;
                 this.speed.y = 0;

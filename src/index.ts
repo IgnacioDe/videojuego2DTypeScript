@@ -30,11 +30,12 @@ export async function launchGame(canvas: HTMLCanvasElement): Promise<void> {
     await Assets.load([
         "/assets/nubes.jpg",
         "/assets/suelo.png",
-        "/assets/maili/milei.png",
-        "/assets/maili/milei2.png",
-        "/assets/maili/milei3.png",
-        "/assets/maili/milei4.png",
-        "/assets/maili/milei5.png",
+        "/assets/Presidentes/Milei/milei_spritesheet.json",
+        //"/assets/maili/milei.png",
+        //"/assets/maili/milei2.png",
+        //"/assets/maili/milei3.png",
+        //"/assets/maili/milei4.png",
+        //"/assets/maili/milei5.png",
         "/assets/window.png",        // <-- NUEVO: Para el fondo del diálogo
         "/assets/button_def.png",    // <-- NUEVO: Estado normal del botón
         "/assets/button_down.png",   // <-- NUEVO: Estado presionado
